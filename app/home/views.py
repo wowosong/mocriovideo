@@ -36,6 +36,7 @@ def login():
             flash(u'无效密码！！！', 'err')
             return redirect(url_for('home.login'))
         login_user(user,form.remember_me.data)
+        flash(u'登录成功','ok')
         session['user'] = user.name
         session['user_id'] = user.id
         userlog = UserLog(
