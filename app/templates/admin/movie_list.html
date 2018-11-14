@@ -1,0 +1,89 @@
+{% extends "admin/admin.html" %}
+{% import 'ui/page.html' as page %}
+{% block content %}
+    <section class="content-header">
+        <h1>微电影管理系统</h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 电影管理</a></li>
+            <li class="active">电影列表</li>
+        </ol>
+    </section>
+    <section class="content" id="showcontent">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">电影列表</h3>
+                        <div class="box-tools">
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                                <input type="text" name="table_search" class="form-control pull-right" id="key_movie"
+                                       placeholder="请输入关键字...">
+                                <div class="input-group-btn">
+                                    <button type="submit" class="btn btn-default" id="search_movie"><i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-hover">
+                            <tbody>
+                            <tr>
+                                <th>编号</th>
+                                <th>片名</th>
+                                <th>片长</th>
+                                <th>标签</th>
+                                <th>地区</th>
+                                <th>星级</th>
+                                <th>播放数量</th>
+                                <th>评论数量</th>
+                                <th>上映时间</th>
+                                <th>操作事项</th>
+                            </tr>
+                            {% for message in get_flashed_messages(category_filter=["ok"]) %}
+                            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
+                                </button>
+                                <h4><i class="icon fa fa-check"></i>操作成功</h4>
+                            </div>
+                            {% endfor %}
+                            {% for movie in movielist.items %}
+                            <tr>
+                                <td>{{ movie.id }}</td>
+                                <td>{{ movie.title }}</td>
+                                <td>{{ movie.length }}分钟</td>
+                                <td>{{ movie.tag.name }}</td>
+                                <td>{{ movie.area }}</td>
+                                <td>{{ movie.star }}星级</td>
+                                <td>{{ movie.playnum }}</td>
+                                <td>{{ movie.commentnum }}</td>
+                                <td>{{ movie.release_time }}</td>
+                                <td>
+                                    <a href="{{ url_for('admin.movie_edit',id=movie.id) }}"class="label label-success">编辑</a>
+                                    <a href="{{ url_for('admin.movie_del',id=movie.id) }}"class="label label-danger">删除</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-footer clearfix">
+                        {{ page.pagination_widget(movielist,'admin.movie_list') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $("#g-3").addClass("active")
+            $("#g-3-2").addClass("active")
+        });
+        $("#search_movie").click(function(){
+            var key_movie=$("#key_movie").val();
+            location.href="{{ url_for("admin.search",page=1) }}?key=" + key_movie;
+        } );
+    </script>
+{% endblock %}
