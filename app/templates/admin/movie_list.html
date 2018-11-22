@@ -47,7 +47,7 @@
                                 <h4><i class="icon fa fa-check"></i>操作成功</h4>
                             </div>
                             {% endfor %}
-                            {% for movie in movielist.items %}
+                            {% for movie in movie_list.items %}
                             <tr>
                                 <td>{{ movie.id }}</td>
                                 <td>{{ movie.title }}</td>
@@ -68,7 +68,7 @@
                         </table>
                     </div>
                     <div class="box-footer clearfix">
-                        {{ page.pagination_widget(movielist,'admin.movie_list') }}
+                        {{ page.pagination_widget(movie_list,'admin.movie_list') }}
                     </div>
                 </div>
             </div>
@@ -83,7 +83,7 @@
         });
         $("#search_movie").click(function(){
             var key_movie=$("#key_movie").val();
-            location.href="{{ url_for("admin.search",page=1) }}?key=" + key_movie;
+            location.href="{{ url_for("admin.movie_search",page=1) }}?key=" + key_movie;
         } );
     </script>
 {% endblock %}

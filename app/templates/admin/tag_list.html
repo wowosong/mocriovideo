@@ -66,7 +66,7 @@
                         </table>
                     </div>
                     <div class="box-footer clearfix">
-                        {{ page.pagination_widget(taglist,'admin.search') }}
+                        {{ page.pagination_widget(taglist,'admin.tag_search') }}
                     </div>
                 </div>
             </div>
@@ -82,7 +82,7 @@
         });
         $("#do_search").click(function(){
             var key=$("#key_tag").val();
-            location.href="{{ url_for("admin.search",page=1) }}?key=" + key;
+            location.href="{{ url_for("admin.tag_search",page=1) }}?key=" + key;
         } );
     </script>
 {% endblock %}
