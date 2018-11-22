@@ -169,7 +169,7 @@ def search(page=None):
         page=1
     key=request.args.get('key',"")
     movie_count = Movie.query.filter(Movie.title.ilike('%'+key+'%')).count()
-    movie = Movie.query.filter(Movie.title.ilike('%'+key+'%')).order_by(Movie.addtime.desc()).paginate(page=page, per_page=5)
+    movie = Movie.query.filter(Movie.title.ilike('%'+key+'%')).order_by(Movie.addtime.desc()).paginate(page=page, per_page=10)
     return  render_template('home/search.html',movie=movie,key=key,movie_count=movie_count)
 
 @home.route('/play/<int:id>/<int:page>/',methods=['GET','POST'])
