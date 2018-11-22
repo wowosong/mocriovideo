@@ -19,6 +19,11 @@ login_manager.session_protection = 'strong'
 # 设置登陆页面的端点           蓝本名称.路由
 login_manager.login_view = 'home.login'
 login_manager.init_app(app)
+login_manager.refresh_view = "accounts.reauthenticate"
+login_manager.needs_refresh_message = (
+    u"To protect your account, please reauthenticate to access this page."
+)
+login_manager.needs_refresh_message_category = "info"
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS

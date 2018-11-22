@@ -2,7 +2,7 @@
 from app.home import home
 from flask import  render_template,url_for,redirect,request,flash,session
 from .forms import LoginForm,RegisterForm,UserForm,PasswordForm,PostForm
-from flask_login import login_user,login_required,current_user,logout_user
+from flask_login import login_user,login_required,current_user,logout_user,fresh_login_required
 from app.models import User,UserLog,Comment,MovieCol,Movie,Tag,Preview
 from app import  db,app,login_manager,allowed_file
 import os
@@ -48,11 +48,11 @@ def login():
         return  redirect(request.args.get('next') or url_for('home.user'))
     return render_template('home/login.html',form=form)
 @home.route('/logout')
-# @login_required
+@login_required
 def logout():
-    logout_user()
-    # session.pop('user')
-    # session.pop('user_id')
+    # logout_user()
+    session.pop('user')
+    session.pop('user_id')
     return redirect(url_for('home.login'))
 @home.route('/register/',methods=['GET','POST'])
 def register():
@@ -119,9 +119,9 @@ def pwd():
     form = PasswordForm()
     if form.validate_on_submit():
         data = form.data
-        user = User.query.filter_by(name=session.get('user_id')).first()
-        from  werkzeug.security import generate_password_hash
-        user.password = generate_password_hash(data['newPwd'])
+        user = User.query.filter_by(id=session.get('user_id')).first()
+        from werkzeug.security import generate_password_hash
+        user.password_hash = generate_password_hash(data['newPwd'])
         db.session.add(user)
         db.session.commit()
         flash(u'修改密码成功，请重新登录', 'ok')
@@ -131,7 +131,7 @@ def pwd():
         )
         db.session.add(oplog)
         db.session.commit()
-        return redirect(url_for('home.logout'))
+        return redirect(url_for('home.login'))
     return  render_template('home/pwd.html',form=form)
 @home.route('/comments/list/<int:page>')
 @login_required

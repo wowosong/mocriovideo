@@ -21,19 +21,33 @@
                 <form role="form" method="post">
                     <fieldset>
                         <div class="form-group">
+                        {% for message in get_flashed_messages(category_filter=["ok"]) %}
+                            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
+                                </button>
+                                <h6>{{ message }}</h6>
+                            </div>
+                        {% endfor %}
                             <label for="input_oldpwd"><span class="glyphicon glyphicon-lock"></span>&nbsp;{{ form.oldPwd.label }}</label>
                           {{ form.oldPwd }}
+                            {% for err in form.oldPwd.errors %}
+                                     <div class="col-md-12">
+                                        <font style="color: red">{{ err }}</font>
+                                    </div>
+                                {% endfor %}
                         </div>
-                        <div class="col-md-12" id="error_oldpwd"></div>
                         <div class="form-group">
                             <label for="input_newpwd"><span class="glyphicon glyphicon-lock"></span>&nbsp;{{ form.newPwd.label }}</label>
                             {{ form.newPwd }}
+                            {% for err in form.newPwd.errors %}
+                                     <div class="col-md-12">
+                                        <font style="color: red">{{ err }}</font>
+                                    </div>
+                                {% endfor %}
                         </div>
-                        <div class="col-md-12" id="error_newpwd"></div>
                         <div class="box-footer">
-                            <a href="login.html" class="btn btn-success"><span class="glyphicon glyphicon-edit"></span>  {{ form.submit.label }}</a>
+                            {{ form.submit }}
                             {{ form.csrf_token }}
-                            {{ form.sumbit }}
                         </div>
                     </fieldset>
                 </form>

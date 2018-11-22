@@ -97,20 +97,20 @@ class UserForm(FlaskForm):
             raise ValidationError(u'电话号码已经使用！！！')
 class PasswordForm(FlaskForm):
     oldPwd = PasswordField(label=u'旧密码',
-                       validators=[DataRequired(u'请输入旧密码！'),EqualTo(u'newPwd',message=u'新旧密码要匹配！')],
-                       description=u'标签',
+                       validators=[DataRequired(u'请输入旧密码！')],
+                       description=u'旧密码',
                                    render_kw={
             "class": "form-control",
             "placeholder": u"请输入旧密码！"
         })
     newPwd = PasswordField(label=u'新密码',
                        validators=[DataRequired(u'请输入新密码！')],
-                       description=u'密码', render_kw={
+                       description=u'新密码', render_kw={
             "class": "form-control",
             "placeholder": u"请输入新密码"
         })
-    submit = SubmitField(label=u'保存', render_kw={
-        "class": "btn btn-primary"
+    submit = SubmitField(label=u'保存',render_kw={
+    "class" :"glyphicon glyphicon-edit"
     })
     def validate_oldpwd(self,field):
         from flask import  session
