@@ -129,6 +129,13 @@ def tag_list(page=None):
         page=1
     taglist=Tag.query.order_by(Tag.addTagTime.desc()).paginate(page=page,per_page=10)
     return render_template('admin/tag_list.html',taglist=taglist)
+@admin.route('/tag/search/<int:page>')
+def tag_search(page=None):
+    if page is None:
+        page=1
+    key=request.args.get('key',"")
+    taglist = Tag.query.filter(Tag.name.ilike('%'+key+'%')).order_by(Tag.addTagTime.desc()).paginate(page=page, per_page=10)
+    return  render_template('admin/tag_list.html',taglist=taglist)
 @admin.route('/tag/edit/<int:id>',methods=['GET','POST'])
 @admin_log_req
 @admin_auth
@@ -216,6 +223,7 @@ def movie_add():
         db.session.commit()
         return redirect(url_for('admin.movie_add'))
     return render_template('admin/movie_add.html',form=form)
+
 @admin.route('/movie/edit/<int:id>',methods=['GET','POST'])
 @admin_log_req
 @admin_auth
@@ -270,8 +278,16 @@ def movie_edit(id=None):
 def movie_list(page=None):
     if page is None:
         page=1
-    movielist=Movie.query.join(Tag).filter(Tag.id==Movie.tag_id).order_by(Movie.addtime.desc()).paginate(page=page,per_page=10)
-    return render_template('admin/movie_list.html',movielist=movielist)
+    movie_list=Movie.query.join(Tag).filter(Tag.id==Movie.tag_id).order_by(Movie.addtime.desc()).paginate(page=page,per_page=10)
+    return render_template('admin/movie_list.html',movie_list=movie_list)
+@admin.route('/movie/search/<int:page>')
+def movie_search(page=None):
+    if page is None:
+        page=1
+    key=request.args.get('key',"")
+    movie = Movie.query.filter(Movie.title.ilike('%' + key + '%')).order_by(Movie.addtime.desc()).paginate(page=page,  per_page=10)
+    movie_list = Movie.query.filter(Movie.title.ilike('%'+key+'%')).order_by(Movie.addtime.desc()).paginate(page=page, per_page=10)
+    return  render_template('admin/movie_list.html',movie_list=movie_list)
 @admin.route('/movie/del/<int:id>')
 @admin_log_req
 @admin_auth
@@ -356,6 +372,13 @@ def preview_list(page=None):
     prew_list = Preview.query.filter().order_by(Preview.addtime.desc()).paginate(
         page=page, per_page=10)
     return render_template('admin/preview_list.html',prew_list=prew_list)
+@admin.route('/preview/search/<int:page>')
+def preview_search(page=None):
+    if page is None:
+        page=1
+    key=request.args.get('key',"")
+    prew_list = Preview.query.filter(Preview.title.ilike('%'+key+'%')).order_by(Preview.addtime.desc()).paginate(page=page, per_page=10)
+    return  render_template('admin/preview_list.html',prew_list=prew_list)
 @admin.route('/preview/del/<int:id>')
 @admin_log_req
 def preview_del(id=None):
