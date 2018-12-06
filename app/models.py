@@ -119,6 +119,7 @@ class Auth(db.Model):
     name = db.Column(db.String(100),unique=True)
     url=db.Column(db.String(255),unique=True)
     addtime=db.Column(db.DateTime,index=True,default=datetime.utcnow)
+    role = db.relationship("Role", backref='auth')  # 收藏电影外键关系关联
     def __repr__(self):
         return "Auth:%r>"%self.name
 #角色
@@ -126,7 +127,7 @@ class Role(db.Model):
     __tablename__='role'
     id=db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(100),unique=True)
-    auths=db.Column(db.String(600))
+    auths=db.Column(db.String(600),db.ForeignKey('auth.id'))
     addtime=db.Column(db.DateTime,index=True,default=datetime.utcnow)
     admins=db.relationship("Admin",backref='role')
     def __repr__(self):

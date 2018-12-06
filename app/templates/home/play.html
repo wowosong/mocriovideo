@@ -127,7 +127,13 @@
                             {{ form.csrf_token }}
                             {{ form.submit }}
                         <a class="btn btn-danger" id="btn-col" style="border-radius: 10px;"><span class="glyphicon glyphicon-heart"></span>&nbsp;收藏电影</a>
+
                     </form>
+                        <div class="col-md-12">
+                             <font style="color:green;" id="show_message">
+                             </font>
+                         </div>
+                        <div class="clearfix"> </div>
                 {% endif %}
                     <ul class="commentList">
                         {% for v in comment_list.items %}
@@ -186,11 +192,12 @@
         jwplayer.key = "P9VTqT/X6TSP4gi/hy1wy23BivBhjdzVjMeOaQ==";
     </script>
     <script type="text/javascript">
-        jwplayer("moviecontainer").setup({
+        theplayer=jwplayer("moviecontainer").setup({
             flashplayer: "{{ url_for("static",filename='jwplayer/jwplayer.flash.swf') }}",
             playlist: [{
                 file: "{{ url_for("static",filename='uploads/movie/'+movie.url) }}",
-                title: "{{ movie.title }}"
+                title: "{{ movie.title }}",
+                image:"{{ url_for("static",filename='uploads/movie/'+ movie.logo) }}"
             }],
             modes: [{
                 type: "html5"
@@ -200,14 +207,43 @@
             }, {
                 type: "download"
             }],
+            aspectratio:"10:6",
+            screencolor :"#fff",//播放器颜色
             skin: {
-                name: "vapor"
+                name:"stormtrooper"
             },
             "playlist.position": "left",
             "playlist.size": 400,
             height: 500,
             width: 774,
         });
+        $("#btn-col").click(function () {
+            alert(theplayer.getDuration())
+        })
     </script>
     <!--播放页面-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btn-col").click(function () {
+                var mid ={{ movie.id }};
+                var uid={{ session['user_id'] }};
+                $.ajax({
+                    url:"{{ url_for("home.moviecol_add") }}",
+                    type:"GET",
+                    data:"mid="+mid+"&uid="+uid,
+                    datatype:"json",
+                    success: function (res) {
+                        if (res.ok == 1){
+                            $("#show_message").empty();
+                            $("#show_message").append("收藏成功！");
+
+                        }else{
+                            $("#show_message").empty();
+                            $("#show_message").append("已经收藏过！");
+                        }
+                    }
+                })
+            })
+        });
+    </script>
 {% endblock %}

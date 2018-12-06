@@ -20,12 +20,12 @@
                     {% for v in moviecol_list.items %}
                     <div class="media">
                         <div class="media-left">
-                            <a href="{{ url_for('home.play',id=v.movie.id) }}">
-                                <img class="media-object" src="{{ url_for("static",filename="uploads/movie/"+v.movie.logo) }}" style="width: 40px">
+                            <a href="{{ url_for('home.play',id=v.movie.id,page=1) }}">
+                                <img class="media-object" src="{{ url_for("static",filename="uploads/movie/"+v.movie.logo) }}" style="width: 131px;height: 83px;">
                             </a>
                         </div>
                         <div class="media-body">
-                            <h4 class="media-heading">{{ v.movie.title }}<a href="{{ url_for('home.play',id=v.movie.id) }}"
+                            <h4 class="media-heading">{{ v.movie.title }}<a href="{{ url_for('home.play',id=v.movie.id,page=1) }}"
                                                              class="label label-primary pull-right"><span
                                     class="glyphicon glyphicon-play" style="height: 20px;"></span>播放影片</a></h4>
                             {{ v.movie.info }}

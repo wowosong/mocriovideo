@@ -9,6 +9,7 @@ import os
 from functools import  wraps
 from werkzeug.security import generate_password_hash
 import  uuid
+import urllib,json
 
 def user_log_req(f):
     @wraps(f)
@@ -24,6 +25,21 @@ def user_log_req(f):
             return redirect(url_for('home.login',next=request.url))
         return f(*args,**kwargs)
     return decoration_func
+
+url = "http://ip.taobao.com/service/getIpInfo.php?ip="
+
+# 查找IP地址
+def ip_location(ip):
+    data = urllib.urlopen(url + ip).read()
+    datadict = json.loads(data)
+
+    for oneinfo in datadict:
+        if "code" == oneinfo:
+            if datadict[oneinfo] == 0:
+                return datadict["data"]["country"] + datadict["data"]["region"] + datadict["data"]["city"] + \
+                       datadict["data"]["isp"]
+
+
 @home.route('/login/',methods=['GET','POST'])
 def login():
     form = LoginForm()
@@ -78,7 +94,7 @@ def user():
         form.logo.data=user.face
         form.email.data=user.email
     if form.validate_on_submit():
-        print form.logo.data
+        # print form.logo.data
         file_logo = form.logo.data.filename
         print file_logo
         if not os.path.exists(app.config['UP_DIR'] + '/userface/'):
@@ -103,6 +119,32 @@ def user():
         db.session.commit()
         return redirect(url_for('home.user'))
     return  render_template('home/user.html',form=form,user=user)
+@home.route('/moviecol/add/',methods=["GET"])
+@login_required
+@user_log_req
+def moviecol_add():
+    uid=request.args.get('uid','')
+    mid=request.args.get('mid','')
+    moviecol=MovieCol.query.filter_by(
+        user_id=int(uid),
+        movie_id=int(mid)
+    ).count()
+    print moviecol,type(moviecol)
+    if  moviecol==1:
+        data=dict(ok=0)
+        # print data,json.dumps(data)
+    if moviecol==0:
+        moviecol=MovieCol(
+            user_id=int(uid),
+            movie_id=int(mid)
+        )
+        db.session.add(moviecol)
+        db.session.commit()
+        data=dict(ok=1)
+        # print  data,json.dumps(data)
+    import json
+    return json.dumps(data)
+
 @home.route('/moviecol/list/<int:page>')
 @login_required
 @user_log_req
@@ -149,19 +191,59 @@ def loginlog( page=None):
         page=1
     user = User.query.get(int(session.get('user_id')))
     userlog_list=UserLog.query.join(User).filter(UserLog.user_id==User.id,User.id==user.id).order_by(UserLog.logontime.desc()).paginate(page=page,per_page=5)
-    return  render_template('home/loginlog.html',userlog_list=userlog_list)
-@home.route('/<int:page>/')
+    iplocation = ip_location(ip=userlog_list.items[0].ip)
+    return  render_template('home/loginlog.html',userlog_list=userlog_list,iplocation=iplocation)
+@home.route('/')
 def index(page=None):
-    if page is None:
-        page=1
-    movie_list=Movie.query.order_by(Movie.addtime.desc()).paginate(page=page,per_page=10)
-    tag=Tag.query.order_by(Tag.addTagTime.desc())
-    return  render_template('home/index.html',movie_list=movie_list,tag=tag)
+    tag=Tag.query.all()
+    page_data=Movie.query
+    tid=request.args.get('tid',0)
+    if int(tid)!=0:
+        page_data=page_data.filter_by(tag_id=int(tid))
+    star=request.args.get('star',0)
+    if int(star)!=0:
+        page_data=page_data.filter_by(star=int(star))
+    time=request.args.get('time',0)
+    if int(time)!=0:
+        if int(time)==1:
+            page_data=page_data.order_by(Movie.addtime.desc())
+        else:
+            page_data=page_data.order_by(Movie.addtime.asc())
+
+    pm=request.args.get('pm',0)
+    if int(pm) != 0:
+        if int(pm) == 1:
+            page_data = page_data.order_by(Movie.playnum.desc())
+        else:
+            page_data = page_data.order_by(Movie.playnum.asc())
+
+    cm=request.args.get('cm',0)
+    if int(cm) != 0:
+        if int(cm) == 1:
+            page_data = page_data.order_by(Movie.commentnum.desc())
+        else:
+            page_data = page_data.order_by(Movie.commentnum.asc())
+
+    p=dict(
+        tid=tid,
+        star = star,
+        time =time,
+        pm = pm,
+        cm = cm
+    )
+    page=request.args.get('page',1)
+    movie_list=page_data.paginate(page=int(page),per_page=10)
+    return  render_template('home/index.html',movie_list=movie_list,tag=tag,p=p)
+# @home.route('/<int:page>/')
+# def index(page=None):
+#     if page is None:
+#         page=1
+#     movie_list=Movie.query.order_by(Movie.addtime.desc()).paginate(page=page,per_page=10)
+#     tag=Tag.query.order_by(Tag.addTagTime.desc())
+#     return  render_template('home/index.html',movie_list=movie_list,tag=tag)
 @home.route('/animation/')
 def animation():
     preview=Preview.query.all()
-    # for p in preview:
-    #     print p.logo
     return  render_template('home/animation.html',preview=preview)
 @home.route('/search/<int:page>')
 def search(page=None):
@@ -173,7 +255,6 @@ def search(page=None):
     return  render_template('home/search.html',movie=movie,key=key,movie_count=movie_count)
 
 @home.route('/play/<int:id>/<int:page>/',methods=['GET','POST'])
-# @home.route('/play/',methods=['GET','POST'])
 def play(id=None,page=None):
     if id is None:
         id=1
@@ -183,8 +264,6 @@ def play(id=None,page=None):
     comment_count=Comment.query.filter_by(movie_id=movie.id).count()
     form = PostForm()
     if form.validate_on_submit():
-    # if form.validate_on_submit():
-        # print session.get('user_id')
         comment=Comment(
             content=form.data['info'],
             movie_id = movie.id,

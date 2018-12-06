@@ -65,13 +65,18 @@ class MovieForm(FlaskForm):
            description=u'片名',
            render_kw={
             "class": "form-control",
-               "id":"input_title",
-            "placeholder": u"请输入片名"
+            "id":"input_title",
+            "placeholder": u"请输入片名",
+            "style": "width:600px;"
         })
     url=FileField(
         label=u'文件',
         validators=[DataRequired(u'请选择文件')],
-        description=u'文件'
+        description=u'文件',
+        render_kw={
+            "class": "form-group",
+            "placeholder": u"请选择文件"
+        }
     )
     info=TextAreaField(
         label=u'简介',
@@ -80,6 +85,7 @@ class MovieForm(FlaskForm):
         render_kw={
             "class": "form-control",
             "rows":"10",
+            "style":"width:600px;"
         }
     )
     logo=FileField(
@@ -95,6 +101,7 @@ class MovieForm(FlaskForm):
         description=u'星级',
         render_kw={
             "class": "form-control",
+            "style": "width:200px;"
         }
     )
     tag_id=SelectField(
@@ -107,6 +114,7 @@ class MovieForm(FlaskForm):
         description=u'标签',
         render_kw={
             "class": "form-control",
+            "style": "width:200px;"
         }
     )
     area = StringField(label=u'地区',
@@ -114,14 +122,16 @@ class MovieForm(FlaskForm):
        description=u'地区',
        render_kw={
            "class": "form-control",
-           "placeholder": u"请输入地区"
+           "placeholder": u"请输入地区",
+           "style": "width:200px;"
        })
     length = StringField(label=u'片长',
        validators=[DataRequired(u'请输入片长！')],
        description=u'片长',
        render_kw={
            "class": "form-control",
-           "placeholder": u"请输入片长"
+           "placeholder": u"请输入片长",
+           "style": "width:200px;"
        })
     release_time = StringField(label=u'上映时间',
                          validators=[DataRequired(u'请选择上映时间！')],
@@ -129,7 +139,8 @@ class MovieForm(FlaskForm):
                          render_kw={
                              "class": "form-control",
                              "id":"input_release_time",
-                             "placeholder": u"请选择上映时间"
+                             "placeholder": u"请选择上映时间",
+                             "style": "width:200px;"
                          })
     submit = SubmitField(label=u'添加', render_kw={
         "class": "btn btn-primary"

@@ -69,7 +69,7 @@
                                         <font style="color: red">{{ err }}</font>
                                     </div>
                                 {% endfor %}
-                                <img data-src="holder.js/262x166" style="margin-top:5px;" class="img-responsive"
+                                <img data-src="holder.js/262x166" src="" style="margin-top:5px;width: 262px;height: 166px;" class="img-responsive"
                                      alt="">
                             </div>
                             <div class="form-group">
@@ -130,12 +130,49 @@
     <!--内容-->
 {% endblock %}
 {% block js %}
-    <script>
-        $(document).ready(function () {
-            $("#g-3").addClass("active")
-            $("#g-3-1").addClass("active")
+<script>
+    $(document).ready(function () {
+        $("#g-3").addClass("active")
+        $("#g-3-1").addClass("active")
+    });
+    $(function(){
+        $("#logo").on("change",function () {
+            var $file = $(this);
+            var fileObj = $file[0];
+            var windowURL = window.URL || window.webkitURL;
+            var dataURL;
+            var $img = $("img");
+            if (fileObj && fileObj.files && fileObj.files[0]) {
+                dataURL = windowURL.createObjectURL(fileObj.files[0]);
+                $img.attr('src', dataURL);
+            } else {
+                dataURL = $file.val();
+                var imgObj = document.getElementById("preview");
+                imgObj.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+                imgObj.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = dataURL;
+            }
         });
-    </script>
+    });
+    $(function () {
+        $("#url").on("change",function () {
+            var $file=$(this);
+            var fileObj = $file[0];
+            var windowURL = window.URL || window.webkitURL;
+            var dataURL;
+            var $file = $("file");
+            if (fileObj && fileObj.files && fileObj.files[0]) {
+                dataURL = windowURL.createObjectURL(fileObj.files[0]);
+                $file.attr('file', dataURL);
+                console.log("$file")
+            } else {
+                dataURL = $file.val();
+                var imgObj = document.getElementById("#input_url");
+                imgObj.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+                imgObj.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").file = dataURL;
+            }
+        })
+    })
+</script>
     <script src="{{ url_for('static',filename="admin/plugins/jQuery/jQuery-2.2.0.min.js") }}"></script>
 <script src="{{ url_for('static',filename="admin/bootstrap/js/bootstrap.min.js") }}"></script>
 <script src="{{ url_for('static',filename="admin/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
@@ -156,7 +193,6 @@
         flashplayer: "{{ url_for('static',filename="jwplayer/jwplayer.flash.swf")}}",
         playlist: [{
             file: "{{ url_for('static',filename="video/htpy.mp4")}}",
-{#            file: "{{ url_for('static',filename="uploads/movie/"+form.url)}}",#}
             title: "环太平洋"
         }],
         modes: [{

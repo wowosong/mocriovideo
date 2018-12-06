@@ -190,8 +190,8 @@ def movie_add():
         # file_url=secure_filename(form.url.data.filename)
         # file_logo=secure_filename(form.logo.data.filename)
         file_url=form.url.data.filename
+        print file_url,form.url
         file_logo=form.logo.data.filename
-        print form.logo
         if not os.path.exists(app.config['UP_DIR'] +'/movie/'):
             os.makedirs(app.config['UP_DIR'] +'/movie/')
             os.chmod(app.config['UP_DIR'] +'/movie/','rw')
@@ -285,7 +285,7 @@ def movie_search(page=None):
     if page is None:
         page=1
     key=request.args.get('key',"")
-    movie = Movie.query.filter(Movie.title.ilike('%' + key + '%')).order_by(Movie.addtime.desc()).paginate(page=page,  per_page=10)
+    # movie = Movie.query.filter(Movie.title.ilike('%' + key + '%')).order_by(Movie.addtime.desc()).paginate(page=page,  per_page=10)
     movie_list = Movie.query.filter(Movie.title.ilike('%'+key+'%')).order_by(Movie.addtime.desc()).paginate(page=page, per_page=10)
     return  render_template('admin/movie_list.html',movie_list=movie_list)
 @admin.route('/movie/del/<int:id>')
@@ -410,6 +410,13 @@ def user_view(id=None):
         id = 1
     user = User.query.get_or_404(int(id))
     return render_template('admin/user_view.html',user=user)
+@admin.route('/user/search/<int:page>')
+def user_search(page=None):
+    if page is None:
+        page=1
+    key=request.args.get('key',"")
+    user_list = User.query.filter(User.name.ilike('%'+key+'%')).order_by(User.addtime.desc()).paginate(page=page, per_page=10)
+    return  render_template('admin/user_list.html',user_list=user_list)
 @admin.route('/user/del/<int:id>')
 @admin_log_req
 @admin_auth
@@ -460,6 +467,13 @@ def comment_del(id=None):
     db.session.add(oplog)
     db.session.commit()
     return redirect(url_for('admin.comment_list',page=1))
+@admin.route('/comment/search/<int:page>')
+def comment_search(page=None):
+    if page is None:
+        page=1
+    key=request.args.get('key',"")
+    comment_list = Comment.query.filter(Comment.content.ilike('%'+key+'%')).order_by(Comment.addtime.desc()).paginate(page=page, per_page=10)
+    return  render_template('admin/preview_comment_list.html',comment_list=comment_list)
 @admin.route('/moviecol/list/<int:page>')
 @admin_log_req
 @admin_auth
@@ -478,6 +492,13 @@ def moviecol_list(page=None):
     ).paginate(
         page=page, per_page=10)
     return render_template('admin/moviecol_list.html',moviecol_list=moviecol_list)
+@admin.route('/moviecol/search/<int:page>')
+def moviecol_search(page=None):
+    if page is None:
+        page=1
+    key=request.args.get('key',"")
+    moviecol_list = MovieCol.query.join(Movie).filter(Movie.title.ilike('%'+key+'%')).order_by(MovieCol.addtime.desc()).paginate(page=page, per_page=10)
+    return  render_template('admin/moviecol_list.html',moviecol_list=moviecol_list)
 @admin.route('/moviecol/del/<int:id>')
 @admin_log_req
 @admin_auth
@@ -509,6 +530,13 @@ def oplog_list(page=None):
     ).paginate(
         page=page, per_page=10)
     return render_template('admin/oplog_list.html',oplog_list=oplog_list)
+@admin.route('/oplog/search/<int:page>')
+def oplog_search(page=None):
+    if page is None:
+        page=1
+    key=request.args.get('key',"")
+    oplog_list = OpLog.query.filter(OpLog.reason.ilike('%'+key+'%')).order_by(OpLog.logontime.desc()).paginate(page=page, per_page=10)
+    return  render_template('admin/oplog_list.html',oplog_list=oplog_list)
 @admin.route('/adminloginlog/list/<int:page>')
 @admin_log_req
 @admin_auth
@@ -520,6 +548,13 @@ def adminloginlog_list(page=None):
     ).filter().order_by(AdminLog.logontime.desc()).paginate(
         page=page, per_page=10)
     return render_template('admin/adminloginlog_list.html', adminloginlog_list=adminloginlog_list)
+@admin.route('/adminloginlog/search/<int:page>')
+def adminloginlog_search(page=None):
+    if page is None:
+        page=1
+    key=request.args.get('key',"")
+    adminloginlog_list = AdminLog.query.join(Admin).filter(Admin.name.ilike('%'+key+'%')).order_by(AdminLog.logontime.desc()).paginate(page=page, per_page=10)
+    return  render_template('admin/adminloginlog_list.html',adminloginlog_list=adminloginlog_list)
 @admin.route('/userloginlog/list/<int:page>')
 @admin_log_req
 @admin_auth
@@ -533,6 +568,13 @@ def userloginlog_list(page=None):
     ).order_by(UserLog.logontime.desc()).paginate(
         page=page, per_page=10)
     return render_template('admin/userloginlog_list.html', userloginlog_list=userloginlog_list)
+@admin.route('/userloginlog/search/<int:page>')
+def userloginlog_search(page=None):
+    if page is None:
+        page=1
+    key=request.args.get('key',"")
+    userloginlog_list = UserLog.query.join(User).filter(User.name.ilike('%'+key+'%')).order_by(UserLog.logontime.desc()).paginate(page=page, per_page=10)
+    return  render_template('admin/userloginlog_list.html',userloginlog_list=userloginlog_list)
 @admin.route('/auth/add',methods=['GET','POST'])
 @admin_log_req
 @admin_auth
@@ -608,6 +650,13 @@ def auth_list(page=None):
     ).order_by(Auth.addtime.desc()).paginate(
         page=page, per_page=10)
     return render_template('admin/auth_list.html', auth_list=auth_list)
+@admin.route('/auth/search/<int:page>')
+def auth_search(page=None):
+    if page is None:
+        page=1
+    key=request.args.get('key',"")
+    auth_list = Auth.query.filter(Auth.name.ilike('%'+key+'%')).order_by(Auth.addtime.desc()).paginate(page=page, per_page=10)
+    return  render_template('admin/auth_list.html',auth_list=auth_list)
 @admin.route('/role/add',methods=['GET','POST'])
 @admin_log_req
 @admin_auth
@@ -637,10 +686,16 @@ def role_add():
 def role_list(page=None):
     if page is None:
         page = 1
-    role_list = Role.query.filter(
-    ).order_by(Role.addtime.desc()).paginate(
+    role_list = Role.query.order_by(Role.addtime.desc()).paginate(
         page=page, per_page=10)
     return render_template('admin/role_list.html', role_list=role_list)
+@admin.route('/role/search/<int:page>')
+def role_search(page=None):
+    if page is None:
+        page=1
+    key=request.args.get('key',"")
+    role_list = Role.query.filter(Role.name.ilike('%'+key+'%')).order_by(Role.addtime.desc()).paginate(page=page, per_page=10)
+    return  render_template('admin/role_list.html',role_list=role_list)
 @admin.route('/role/edit/<int:id>',methods=['GET','POST'])
 @admin_log_req
 @admin_auth
@@ -714,3 +769,10 @@ def admin_list(page=None):
     ).order_by(Admin.addtime.desc()).paginate(
         page=page, per_page=10)
     return render_template('admin/admin_list.html', admin_list=admin_list)
+@admin.route('/admin/search/<int:page>')
+def admin_search(page=None):
+    if page is None:
+        page=1
+    key=request.args.get('key',"")
+    admin_list = Admin.query.filter(Admin.name.ilike('%'+key+'%')).order_by(Admin.addtime.desc()).paginate(page=page, per_page=10)
+    return  render_template('admin/admin_list.html',admin_list=admin_list)
