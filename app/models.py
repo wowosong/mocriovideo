@@ -22,6 +22,18 @@ class User(UserMixin,db.Model):
         super(User, self).__init__(**kwargs)
     def __repr__(self):
         return "<User:%s>"%self.name
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return unicode(self.id)
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')

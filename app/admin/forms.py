@@ -92,6 +92,10 @@ class MovieForm(FlaskForm):
         label=u'封面',
         validators=[DataRequired(u'请上传封面')],
         description=u'封面',
+        render_kw={
+            "class": "form-control",
+            "style": "width:600px;"
+        }
     )
     star=SelectField(
         label=u'星级',
@@ -151,14 +155,17 @@ class PrewForm(FlaskForm):
                        description=u'片名',
                        render_kw={
                            "class": "form-control",
-                           "placeholder": u"请输入标题"
+                           "placeholder": u"请输入标题",
+                           "style":"width:30%"
                        })
-    info = StringField(label=u'简介',
+    info = TextAreaField(label=u'简介',
                        validators=[DataRequired(u'请输入简介！')],
                        description=u'简介',
                        render_kw={
                            "class": "form-control",
-                           "placeholder": u"请输入简介"
+                           "placeholder": u"请输入简介",
+                           "style":"width:50%",
+                            "rows": "10",
                        })
     logo = FileField(
         label=u'预告封面',
@@ -175,14 +182,16 @@ class AuthForm(FlaskForm):
                        description=u'权限',
                        render_kw={
                            "class": "form-control",
-                           "placeholder": u"请输入权限名称"
+                           "placeholder": u"请输入权限名称",
+                           "style":"width:30%"
                        })
     authUrl = StringField(label=u'权限地址',
                        validators=[DataRequired(u'请输入权限地址！')],
                        description=u'权限地址',
                        render_kw={
                            "class": "form-control",
-                           "placeholder": u"请输入权限地址"
+                           "placeholder": u"请输入权限地址",
+                           "style":"width:30%"
                        })
     submit = SubmitField(label=u'保存', render_kw={
         "class": "btn btn-primary"
@@ -194,7 +203,8 @@ class RoleForm(FlaskForm):
                            description=u'角色',
                            render_kw={
                                "class": "form-control",
-                               "placeholder": u"请输入角色名称"
+                               "placeholder": u"请输入角色名称",
+                                "style":"width:30%"
                            })
     authname = SelectMultipleField(label=u'操作权限',
                           validators=[DataRequired(u'请勾选权限！')],
@@ -204,7 +214,8 @@ class RoleForm(FlaskForm):
                               (v.id, v.name) for v in auths
                           ],
                           render_kw={
-                              "class": "form-control"
+                              "class": "form-control",
+                           "style":"width:20%"
                           })
     submit = SubmitField(label=u'保存', render_kw={
         "class": "btn btn-primary"
@@ -217,20 +228,23 @@ class AdminForm(FlaskForm):
                        description=u'管理员名称',
                        render_kw={
                            "class": "form-control",
-                           "placeholder": u"请输入管理员名称"
+                           "placeholder": u"请输入管理员名称",
+                           "style":"width:30%"
                        })
     pwd = PasswordField(label=u'密码',
                        validators=[DataRequired(u'请输入密码！')],
                        description=u'密码',
                                    render_kw={
             "class": "form-control",
-            "placeholder": u"请输入密码！"
+            "placeholder": u"请输入密码！",
+            "style":"width:30%"
         })
     confirmPwd = PasswordField(label=u'确认密码',
                        validators=[DataRequired(u'请输入确认密码！'),EqualTo('pwd',message=u'密码要匹配！')],
                        description=u'确认密码', render_kw={
             "class": "form-control",
-            "placeholder": u"请输入确认密码"
+            "placeholder": u"请输入确认密码",
+            "style":"width:30%"
         })
     role = SelectField(
         label=u'所属角色',
@@ -242,6 +256,7 @@ class AdminForm(FlaskForm):
         description=u'标签',
         render_kw={
             "class": "form-control",
+            "style":"width:30%"
         }
     )
     submit = SubmitField(u'保存', render_kw={

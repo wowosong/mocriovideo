@@ -94,9 +94,7 @@ def user():
         form.logo.data=user.face
         form.email.data=user.email
     if form.validate_on_submit():
-        # print form.logo.data
         file_logo = form.logo.data.filename
-        print file_logo
         if not os.path.exists(app.config['UP_DIR'] + '/userface/'):
             os.makedirs(app.config['UP_DIR'] + '/userface/')
             os.chmod(app.config['UP_DIR'] + '/userface/', 'rw')
@@ -129,10 +127,8 @@ def moviecol_add():
         user_id=int(uid),
         movie_id=int(mid)
     ).count()
-    print moviecol,type(moviecol)
     if  moviecol==1:
         data=dict(ok=0)
-        # print data,json.dumps(data)
     if moviecol==0:
         moviecol=MovieCol(
             user_id=int(uid),
@@ -141,7 +137,6 @@ def moviecol_add():
         db.session.add(moviecol)
         db.session.commit()
         data=dict(ok=1)
-        # print  data,json.dumps(data)
     import json
     return json.dumps(data)
 
@@ -232,7 +227,7 @@ def index(page=None):
         cm = cm
     )
     page=request.args.get('page',1)
-    movie_list=page_data.paginate(page=int(page),per_page=10)
+    movie_list=page_data.paginate(page=int(page),per_page=8)
     return  render_template('home/index.html',movie_list=movie_list,tag=tag,p=p)
 # @home.route('/<int:page>/')
 # def index(page=None):

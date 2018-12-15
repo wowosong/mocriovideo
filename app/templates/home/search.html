@@ -5,7 +5,9 @@
 <div class="row">
         <div class="col-md-12">
             <ol class="breadcrumb" style="margin-top:6px;">
-                <li>与"{{ key }}"有关的电影，共{{ movie_count }}部</li>
+                {% if key %}
+                <li>与"{{ key }}"有关的电影，
+                    {% endif %}共{{ movie_count }}部</li>
             </ol>
         </div>
         <div class="col-md-12">

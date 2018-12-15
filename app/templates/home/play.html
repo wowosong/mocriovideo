@@ -217,12 +217,28 @@
             height: 500,
             width: 774,
         });
-        $("#btn-col").click(function () {
-            alert(theplayer.getDuration())
-        })
     </script>
     <!--播放页面-->
     <script type="text/javascript">
+        $(document).ready(function () {
+            if (jwplayer(0).playl(true)){
+                if(jwplayer(0).getState()){
+                    var playcount=0;
+                    playcount=playcount+1;
+                    console.log(playcount)
+                }
+            }
+            var mid ={{ movie.id }};
+            $.ajax({
+                url:"{{ url_for("home.play",id=mid,page=1) }}",
+                type:"GET",
+                data:playcount,
+                datatype:"json",
+                success: function (res){
+                    $("playcount");
+                }
+            });
+        });
         $(document).ready(function () {
             $("#btn-col").click(function () {
                 var mid ={{ movie.id }};
@@ -236,7 +252,6 @@
                         if (res.ok == 1){
                             $("#show_message").empty();
                             $("#show_message").append("收藏成功！");
-
                         }else{
                             $("#show_message").empty();
                             $("#show_message").append("已经收藏过！");
@@ -244,6 +259,6 @@
                     }
                 })
             })
-        });
+        })
     </script>
 {% endblock %}

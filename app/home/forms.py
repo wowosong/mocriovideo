@@ -10,7 +10,9 @@ class LoginForm(FlaskForm):
     name=StringField(label=u'账号',validators=[DataRequired()])
     password=PasswordField(u'密码',validators=[DataRequired()])
     remember_me = BooleanField(u'保持登录')
-    submit=SubmitField(u'登录')
+    submit=SubmitField(label=u'登录',render_kw={
+        "style":"width:100px;height:30px;;margin-left:100px;"
+    })
 class RegisterForm(FlaskForm):
     name = StringField(label=u'账号',validators=[DataRequired()],render_kw={
         "class": "form-control input-lg",

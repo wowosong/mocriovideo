@@ -24,7 +24,7 @@
 {#    {% endif %}#}
 {#{% endmacro %}#}
 {% macro pagination_widget(page_data,page_function,page) %}
-    <ul class="pagination" style="margin-left: 50%; ">
+    <ul class="pagination" style="margin-left: 40%;margin-right: 40% ">
         <li {% if not page_data.has_prev %} class="disabled"{% endif %}>
             <a href="{% if page_data.has_prev %}{{ url_for(page_function,page=page_data.page - 1,**kwargs) }}{% else %}#{% endif %}">
             &laquo;

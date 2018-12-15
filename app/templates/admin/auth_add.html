@@ -22,7 +22,6 @@
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
                                 </button>
                                 <h4><i class="icon fa fa-check"></i>操作成功</h4>
-{#                               {{ message }}#}
                             </div>
                         {% endfor %}
                             {% for message in get_flashed_messages(category_filter=["err"]) %}
@@ -30,7 +29,6 @@
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
                                 </button>
                                 <h4><i class="icon fa fa-check"></i>操作失败</h4>
-{#                                {{ message }}#}
                             </div>
                         {% endfor %}
                             <div class="form-group">

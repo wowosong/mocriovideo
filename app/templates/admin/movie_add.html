@@ -51,6 +51,8 @@
                                 <div style="margin-top:5px;">
                                     <div id="moviecontainer"></div>
                                 </div>
+                                <img src="" style="margin-top:5px;width: 100px;height: 100px" class="img-responsive"
+                                     alt="">
                             </div>
                             <div class="form-group">
                                 <label for="input_info">{{ form.info.label }}</label>
@@ -153,37 +155,38 @@
             }
         });
     });
-    $(function () {
+    $(function(){
         $("#url").on("change",function () {
-            var $file=$(this);
+            var $file = $(this);
+            var url=document.getElementById("#url");
             var fileObj = $file[0];
+
             var windowURL = window.URL || window.webkitURL;
             var dataURL;
-            var $file = $("file");
+            var $img = $("img");
             if (fileObj && fileObj.files && fileObj.files[0]) {
                 dataURL = windowURL.createObjectURL(fileObj.files[0]);
-                $file.attr('file', dataURL);
-                console.log("$file")
+                $img.attr('src', dataURL);
             } else {
                 dataURL = $file.val();
-                var imgObj = document.getElementById("#input_url");
+                var imgObj = document.getElementById("preview");
                 imgObj.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
-                imgObj.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").file = dataURL;
+                imgObj.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = dataURL;
             }
-        })
-    })
+        });
+    });
 </script>
     <script src="{{ url_for('static',filename="admin/plugins/jQuery/jQuery-2.2.0.min.js") }}"></script>
-<script src="{{ url_for('static',filename="admin/bootstrap/js/bootstrap.min.js") }}"></script>
-<script src="{{ url_for('static',filename="admin/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
-<script src="{{ url_for('static',filename="admin/plugins/fastclick/fastclick.js") }}"></script>
-<script src="{{ url_for('static',filename="admin/dist/js/app.min.js") }}"></script>
-<script src="{{ url_for('static',filename="admin/dist/js/demo.js") }}"></script>
-<script src="//cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
-<script src="{{ url_for('static',filename="admin/plugins/datepicker/bootstrap-datepicker.js") }}"></script>
-<script src="{{ url_for('static',filename="admin/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js") }}" charset="UTF-8"></script>
-<!--播放页面-->
-<script src="{{ url_for('static',filename="jwplayer/jwplayer.js")}}"></script>
+    <script src="{{ url_for('static',filename="admin/bootstrap/js/bootstrap.min.js") }}"></script>
+    <script src="{{ url_for('static',filename="admin/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
+    <script src="{{ url_for('static',filename="admin/plugins/fastclick/fastclick.js") }}"></script>
+    <script src="{{ url_for('static',filename="admin/dist/js/app.min.js") }}"></script>
+    <script src="{{ url_for('static',filename="admin/dist/js/demo.js") }}"></script>
+    <script src="//cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
+    <script src="{{ url_for('static',filename="admin/plugins/datepicker/bootstrap-datepicker.js") }}"></script>
+    <script src="{{ url_for('static',filename="admin/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js") }}" charset="UTF-8"></script>
+    <!--播放页面-->
+    <script src="{{ url_for('static',filename="jwplayer/jwplayer.js")}}"></script>
 <script type="text/javascript">
     jwplayer.key = "P9VTqT/X6TSP4gi/hy1wy23BivBhjdzVjMeOaQ==";
 

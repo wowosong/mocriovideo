@@ -35,7 +35,7 @@
     <div class="container">
         <div class="row wow fadeIn" data-wow-delay="0.6s">
             <div class="col-md-12 table-responsive">
-                <table class="table text-left table-bordered" id="movietags" border="0px">
+                <table class="table text-left" id="movietags">
                     <tr>
                         <td style="width:10%;">电影标签</td>
                         <td style="width:90%;">
@@ -88,8 +88,6 @@
             {% for v in movie_list.items %}
             <div class="col-md-3" style="padding: 10px;">
                 <div class="movielist text-center" >
-                    <!--<img data-original="holder.js/262x166"
-                             class="img-responsive lazy center-block" alt="">-->
                     <a href="{{ url_for('home.play',id=v.id,page=1) }}" class="thumbnail" style="border-radius: 10px">
                         <img src="{{ url_for('static',filename='uploads/movie/'+v.logo) }}" class="img-responsive center-block" alt="" style="width: 262px;height: 166px;">
                     </a>
@@ -105,9 +103,9 @@
                         </div>
                          <span style="color:#999;font-style: italic;">{{ v.info }}</span><br>
                     </div>
-                    <a href="{{ url_for('home.play',id=v.id,page=1) }}" class="btn btn-primary btn-sm" target="_blank" type="button" style="border-radius: 10px;width: 100px;"><span class="glyphicon glyphicon-play" ></span>&nbsp;播放</a>
+                    <a href="{{ url_for('home.play',id=v.id,page=1) }}" class="btn btn-primary btn-sm"  type="button" style="border-radius: 10px;width: 200px;"><span class="glyphicon glyphicon-play" ></span>&nbsp;播放</a>
                 </div>
-            </div>
+                 </div>
             {% endfor %}
         </div>
     <div class="col-md-12">
