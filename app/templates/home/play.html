@@ -228,9 +228,9 @@
                     console.log(playcount)
                 }
             }
-            var mid ={{ movie.id }};
+            var mid = {{ movie.id }};
             $.ajax({
-                url:"{{ url_for("home.play",id=mid,page=1) }}",
+                url:"{{ url_for("home.play",id=1,page=1) }}",
                 type:"GET",
                 data:playcount,
                 datatype:"json",

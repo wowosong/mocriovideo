@@ -43,7 +43,6 @@ def admin_auth(f):
 def index():
     return render_template('admin/index.html')
 @admin.route('/login/',methods=['GET','POST'])
-
 def login():
     form=LoginForm()
     if form.validate_on_submit():
@@ -190,7 +189,7 @@ def movie_add():
         # file_url=secure_filename(form.url.data.filename)
         # file_logo=secure_filename(form.logo.data.filename)
         file_url=form.url.data.filename
-        print file_url,form.url
+        # print file_url,form.url
         file_logo=form.logo.data.filename
         if not os.path.exists(app.config['UP_DIR'] +'/movie/'):
             os.makedirs(app.config['UP_DIR'] +'/movie/')
@@ -212,7 +211,7 @@ def movie_add():
         )
         db.session.add(movie)
         db.session.commit()
-        print form.url.data.filename
+        # print form.url.data.filename
         flash(u'添加成功','ok')
         oplog = OpLog(
             admin_id=session['admin_id'],

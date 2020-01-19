@@ -127,7 +127,7 @@ class MovieCol(db.Model):
         return "MovieCol:%r" % self.id
 class Auth(db.Model):
     __tablename__='auth'
-    id=db.Column(db.Integer,primary_key=True)
+    id=db.Column(db.String,primary_key=True)
     name = db.Column(db.String(100),unique=True)
     url=db.Column(db.String(255),unique=True)
     addtime=db.Column(db.DateTime,index=True,default=datetime.utcnow)
@@ -140,6 +140,8 @@ class Role(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(100),unique=True)
     auths=db.Column(db.String(600),db.ForeignKey('auth.id'))
+
+    # auths=db.Column(db.String(600))
     addtime=db.Column(db.DateTime,index=True,default=datetime.utcnow)
     admins=db.relationship("Admin",backref='role')
     def __repr__(self):
@@ -189,6 +191,6 @@ class OpLog(db.Model):
     ip = db.Column(db.String(100))  # 登录IP
     reason=db.Column(db.String(600))#操作原因
     logontime = db.Column(db.DateTime, default=datetime.utcnow)  # 登录时间
-# if __name__=="__main__":
-#     # db.drop_all()
-#     db.create_all()
+if __name__=="__main__":
+    # db.drop_all()
+    db.create_all()

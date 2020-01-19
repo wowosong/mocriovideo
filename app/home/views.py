@@ -74,7 +74,7 @@ def logout():
 def register():
     form=RegisterForm()
     if form.validate_on_submit():
-        user=User(name=form.name.data,email=form.email.data,phone=form.phone.data,password_hash=form.password.data)
+        user=User(name=form.name.data,email=form.email.data,phone=form.phone.data,password_hash=generate_password_hash(form.password.data))
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('home.login'))

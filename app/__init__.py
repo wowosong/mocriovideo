@@ -7,7 +7,7 @@ import pymysql
 from flask_login import LoginManager
 import os
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@127.0.0.1:3306/movie'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root1234@127.0.0.1:3308/movie'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=True
 app.config['SECRET_KEY']='a1b32faecc8445d782899bd10733eafd'
 app.config['UP_DIR']=os.path.join(os.path.abspath(os.path.dirname(__file__)),'static/uploads/')

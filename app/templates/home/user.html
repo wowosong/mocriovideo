@@ -41,7 +41,7 @@
                     <div class="form-group col-sm-10">
                         <label for="input_face"><span class="glyphicon glyphicon-picture"></span>&nbsp;{{ form.logo.label }}</label>
                         <img src="{{ url_for("static",filename='uploads/userface/'+user.face) }}" class="img-responsive img-rounded" style="width: 100px;height: 100px;">
-                        {{ form.logo}}
+                        {{ form.logo(value=user.face)}}
                          {% for err in form.logo.errors %}
                              <div class="col-md-12">
                                 <font style="color: red">{{ err }}</font>
