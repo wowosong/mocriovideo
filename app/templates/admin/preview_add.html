@@ -18,12 +18,19 @@
                     <form role="form" method="post" enctype="multipart/form-data">
                         <div class="box-body">
                             {% for message in get_flashed_messages(category_filter=["ok"]) %}
-                            <div class="alert alert-success alert-dismissable">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
-                                </button>
-                                <h4><i class="icon fa fa-check"></i>操作成功</h4>
-                            </div>
+                                <div class="alert alert-success alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
+                                    </button>
+                                    <h4><i class="icon fa fa-check"></i>操作成功</h4>
+                                </div>
                             {% endfor %}
+{#                            {% for message in get_flashed_messages(category_filter=["warn"]) %}#}
+{#                                <div class="alert alert-success alert-dismissable">#}
+{#                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;#}
+{#                                    </button>#}
+{#                                    <h4><i class="icon fa fa-check"></i>操作失败</h4>#}
+{#                                </div>#}
+{#                            { % endbfor% }#}
                             <div class="form-group">
                                 <label for="input_title">{{ form.name.label }}</label>
                                 {{ form.name }}

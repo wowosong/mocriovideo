@@ -39,7 +39,7 @@ def admin_auth(f):
         return f(*args,**kwargs)
     return decoration_func
 @admin.route('/')
-@admin_auth
+# @admin_auth
 def index():
     return render_template('admin/index.html')
 @admin.route('/login/',methods=['GET','POST'])
@@ -91,7 +91,7 @@ def pwd():
 # 添加标签
 @admin.route('/tag/add',methods=['GET','POST'])
 @admin_log_req
-@admin_auth
+# @admin_auth
 def tag_add():
     form=TagForm()
     if form.validate_on_submit():
@@ -122,7 +122,7 @@ def search(page=None):
 
 @admin.route('/tag/list/<int:page>',methods=['GET'])
 @admin_log_req
-@admin_auth
+# @admin_auth
 def tag_list(page=None):
     if page is None:
         page=1
@@ -137,7 +137,7 @@ def tag_search(page=None):
     return  render_template('admin/tag_list.html',taglist=taglist)
 @admin.route('/tag/edit/<int:id>',methods=['GET','POST'])
 @admin_log_req
-@admin_auth
+# @admin_auth
 def tag_edit(id=None):
     form = TagForm()
     tag=Tag.query.get_or_404(id)
@@ -161,7 +161,7 @@ def tag_edit(id=None):
     return render_template('admin/tag_edit.html', form=form,tag=tag)
 @admin.route('/tag/del/<int:id>',methods=['GET'])
 @admin_log_req
-@admin_auth
+# @admin_auth
 def tag_del(id=None):
     tag=Tag.query.filter_by(id=id).first_or_404()
     db.session.delete(tag)
@@ -182,7 +182,7 @@ def change_name(filename):
     return uuid.uuid4().hex+datetime.datetime('Y%M%D-%H%M%S')+filename
 @admin.route('/movie/add',methods=['GET','POST'])
 @admin_log_req
-@admin_auth
+# @admin_auth
 def movie_add():
     form=MovieForm()
     if form.validate_on_submit():
@@ -225,7 +225,7 @@ def movie_add():
 
 @admin.route('/movie/edit/<int:id>',methods=['GET','POST'])
 @admin_log_req
-@admin_auth
+# @admin_auth
 def movie_edit(id=None):
     form=MovieForm()
     form.url.validators=[]
@@ -273,7 +273,7 @@ def movie_edit(id=None):
 
 @admin.route('/movie/list/<int:page>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def movie_list(page=None):
     if page is None:
         page=1
@@ -289,7 +289,7 @@ def movie_search(page=None):
     return  render_template('admin/movie_list.html',movie_list=movie_list)
 @admin.route('/movie/del/<int:id>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def movie_del(id=None):
     movie=Movie.query.filter_by(id=id).first_or_404()
     db.session.delete(movie)
@@ -305,11 +305,14 @@ def movie_del(id=None):
     return redirect(url_for('admin.movie_list',page=1))
 @admin.route('/preview/add',methods=['GET','POST'])
 @admin_log_req
-@admin_auth
+# @admin_auth
 def preview_add():
     form=PrewForm()
     if form.validate_on_submit():
         file_logo = form.logo.data.filename
+        if Preview.query.filter(form.data['name']):
+            flash(u"名称重复","warn");
+            return redirect(url_for('admin.preview_add'))
         if not os.path.exists(app.config['UP_DIR']+'/preview/'):
             os.makedirs(app.config['UP_DIR']+'/preview/')
             os.chmod(app.config['UP_DIR']+'/preview/', 'rw')
@@ -332,7 +335,7 @@ def preview_add():
     return render_template('admin/preview_add.html',form=form)
 @admin.route('/preview/edit/<int:id>',methods=['GET','POST'])
 @admin_log_req
-@admin_auth
+# @admin_auth
 def preview_edit(id=None):
     form=PrewForm()
     preview = Preview.query.get_or_404(int(id))
@@ -364,7 +367,7 @@ def preview_edit(id=None):
     return render_template('admin/preview_edit.html',form=form,preview=preview)
 @admin.route('/preview/list/<int:page>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def preview_list(page=None):
     if page is None:
         page = 1
@@ -395,7 +398,7 @@ def preview_del(id=None):
     return redirect(url_for('admin.preview_list',page=1))
 @admin.route('/user/list/<int:page>',methods=['GET'])
 @admin_log_req
-@admin_auth
+# @admin_auth
 def user_list(page=None):
     if page is None:
         page = 1
@@ -403,7 +406,7 @@ def user_list(page=None):
         page=page, per_page=10)
     return render_template('admin/user_list.html',user_list=user_list)
 @admin.route('/user/view/<int:id>',methods=['GET'])
-@admin_auth
+# @admin_auth
 def user_view(id=None):
     if id is None:
         id = 1
@@ -418,7 +421,7 @@ def user_search(page=None):
     return  render_template('admin/user_list.html',user_list=user_list)
 @admin.route('/user/del/<int:id>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def user_del(id=None):
     user=User.query.filter_by(id=id).first_or_404()
     db.session.delete(user)
@@ -434,7 +437,7 @@ def user_del(id=None):
     return redirect(url_for('admin.user_list',page=1))
 @admin.route('/comment/list/<int:page>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def comment_list(page=None):
     if page is None:
         page=1
@@ -452,7 +455,7 @@ def comment_list(page=None):
     return render_template('admin/preview_comment_list.html',comment_list=comment_list)
 @admin.route('/comment/del/<int:id>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def comment_del(id=None):
     comment=Comment.query.filter_by(id=id).first_or_404()
     db.session.delete(comment)
@@ -475,7 +478,7 @@ def comment_search(page=None):
     return  render_template('admin/preview_comment_list.html',comment_list=comment_list)
 @admin.route('/moviecol/list/<int:page>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def moviecol_list(page=None):
     if page is None:
         page=1
@@ -500,7 +503,7 @@ def moviecol_search(page=None):
     return  render_template('admin/moviecol_list.html',moviecol_list=moviecol_list)
 @admin.route('/moviecol/del/<int:id>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def moviecol_del(id=None):
     moviecol = MovieCol.query.filter_by(id=id).first_or_404()
     db.session.delete(moviecol)
@@ -516,7 +519,7 @@ def moviecol_del(id=None):
     return redirect(url_for('admin.moviecol_list', page=1))
 @admin.route('/oplog/list/<int:page>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def oplog_list(page=None):
     if page is None:
         page=1
@@ -538,7 +541,7 @@ def oplog_search(page=None):
     return  render_template('admin/oplog_list.html',oplog_list=oplog_list)
 @admin.route('/adminloginlog/list/<int:page>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def adminloginlog_list(page=None):
     if page is None:
         page = 1
@@ -556,7 +559,7 @@ def adminloginlog_search(page=None):
     return  render_template('admin/adminloginlog_list.html',adminloginlog_list=adminloginlog_list)
 @admin.route('/userloginlog/list/<int:page>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def userloginlog_list(page=None):
     if page is None:
         page = 1
@@ -576,7 +579,7 @@ def userloginlog_search(page=None):
     return  render_template('admin/userloginlog_list.html',userloginlog_list=userloginlog_list)
 @admin.route('/auth/add',methods=['GET','POST'])
 @admin_log_req
-@admin_auth
+# @admin_auth
 def auth_add():
     form=AuthForm()
     if form.validate_on_submit():
@@ -600,7 +603,7 @@ def auth_add():
     return render_template('admin/auth_add.html', form=form)
 @admin.route('/auth/edit/<int:id>',methods=['GET','POST'])
 @admin_log_req
-@admin_auth
+# @admin_auth
 def auth_edit(id=None):
     form=AuthForm()
     auth = Auth.query.get_or_404(int(id))
@@ -625,7 +628,7 @@ def auth_edit(id=None):
     return render_template('admin/auth_edit.html', form=form,auth=auth)
 @admin.route('/auth/del/<int:id>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def auth_del(id=None):
     auth = Auth.query.filter_by(id=id).first_or_404()
     db.session.delete(auth)
@@ -641,7 +644,7 @@ def auth_del(id=None):
     return redirect(url_for('admin.auth_list', page=1))
 @admin.route('/auth/list/<int:page>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def auth_list(page=None):
     if page is None:
         page = 1
@@ -658,7 +661,7 @@ def auth_search(page=None):
     return  render_template('admin/auth_list.html',auth_list=auth_list)
 @admin.route('/role/add',methods=['GET','POST'])
 @admin_log_req
-@admin_auth
+# @admin_auth
 def role_add():
     form=RoleForm()
     if form.validate_on_submit():
@@ -681,7 +684,7 @@ def role_add():
     return render_template('admin/role_add.html',form=form)
 @admin.route('/role/list/<int:page>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def role_list(page=None):
     if page is None:
         page = 1
@@ -697,7 +700,7 @@ def role_search(page=None):
     return  render_template('admin/role_list.html',role_list=role_list)
 @admin.route('/role/edit/<int:id>',methods=['GET','POST'])
 @admin_log_req
-@admin_auth
+# @admin_auth
 def role_edit(id=None):
     form = RoleForm()
     role=Role.query.get_or_404(id)
@@ -725,7 +728,7 @@ def role_edit(id=None):
     return render_template('admin/role_edit.html',form=form,role=role)
 @admin.route('/role/del/<int:id>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def role_del(id=None):
     role = Role.query.filter_by(id=id).first_or_404()
     db.session.delete(role)
@@ -734,7 +737,7 @@ def role_del(id=None):
     return redirect(url_for('admin.role_list', page=1))
 @admin.route('/admin/add',methods=['GET','POST'])
 @admin_log_req
-@admin_auth
+# @admin_auth
 def admin_add():
     form=AdminForm()
     if form.validate_on_submit():
@@ -758,7 +761,7 @@ def admin_add():
     return render_template('admin/admin_add.html', form=form)
 @admin.route('/admin/list/<int:page>')
 @admin_log_req
-@admin_auth
+# @admin_auth
 def admin_list(page=None):
     if page is None:
         page = 1

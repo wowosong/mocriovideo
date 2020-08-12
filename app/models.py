@@ -5,6 +5,7 @@ from  flask_login import UserMixin, AnonymousUserMixin
 from werkzeug.security import check_password_hash,generate_password_hash
 class User(UserMixin,db.Model):
     __tablename__="user"
+    __table_args__ = {'extend_existing': True}
     id=db.Column(db.Integer,primary_key=True)#编号
     name=db.Column(db.String(100),unique=True,index=True)#昵称
     password_hash=db.Column(db.String(100))#密码
@@ -58,6 +59,7 @@ def load_user(user_id):
 #会员登录日志
 class UserLog(db.Model):
     __tablename__='userlog'
+    __table_args__ = {'extend_existing': True}
     id=db.Column(db.Integer,primary_key=True)
     user_id=db.Column(db.Integer,db.ForeignKey('user.id'))
     ip=db.Column(db.String(100))#登录IP
@@ -67,6 +69,7 @@ class UserLog(db.Model):
 #标签名称
 class Tag(db.Model):
     __tablename__='tag'
+    __table_args__ = {'extend_existing': True}
     id=db.Column(db.Integer,primary_key=True)
     name=db.Column(db.String(100),unique=True)
     addTagTime=db.Column(db.DateTime,index=True,default=datetime.utcnow)#标签添加时间
@@ -76,6 +79,7 @@ class Tag(db.Model):
 #电影
 class Movie(db.Model):
     __tablename__='movie'
+    __table_args__ = {'extend_existing': True}
     id=db.Column(db.Integer,primary_key=True)#编号
     title=db.Column(db.String(255),unique=True)#标题
     url=db.Column(db.String(255),unique=True)#地址
@@ -96,6 +100,7 @@ class Movie(db.Model):
 
 class Preview(db.Model):
     __tablename__='preview'
+    __table_args__ = {'extend_existing': True}
     id=db.Column(db.Integer,primary_key=True)#编号
     title=db.Column(db.String(255),unique=True)#标题
     info=db.Column(db.Text)#简介
@@ -106,6 +111,7 @@ class Preview(db.Model):
 #评论
 class Comment(db.Model):
     __tablename__='comment'
+    __table_args__ = {'extend_existing': True}
     id=db.Column(db.Integer,primary_key=True)
     content=db.Column(db.Text)
     movie_id=db.Column(db.Integer,db.ForeignKey('movie.id'))#所属电影
@@ -117,6 +123,7 @@ class Comment(db.Model):
 #收藏电影模型
 class MovieCol(db.Model):
     __tablename__='moviecol'
+    __table_args__ = {'extend_existing': True}
     id=db.Column(db.Integer,primary_key=True)
     movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'))
     # 所属电影
@@ -127,7 +134,8 @@ class MovieCol(db.Model):
         return "MovieCol:%r" % self.id
 class Auth(db.Model):
     __tablename__='auth'
-    id=db.Column(db.String,primary_key=True)
+    __table_args__ = {'extend_existing': True}
+    id=db.Column(db.String(100),primary_key=True)
     name = db.Column(db.String(100),unique=True)
     url=db.Column(db.String(255),unique=True)
     addtime=db.Column(db.DateTime,index=True,default=datetime.utcnow)
@@ -137,6 +145,7 @@ class Auth(db.Model):
 #角色
 class Role(db.Model):
     __tablename__='role'
+    __table_args__ = {'extend_existing': True}
     id=db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(100),unique=True)
     auths=db.Column(db.String(600),db.ForeignKey('auth.id'))
@@ -149,6 +158,7 @@ class Role(db.Model):
 #管理员
 class Admin(UserMixin,db.Model):
     __tablename__ = "admin"
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)  # 编号
     name = db.Column(db.String(100), unique=True)  # 昵称
     password = db.Column(db.String(100))  # 密码
@@ -176,6 +186,7 @@ class Admin(UserMixin,db.Model):
 #管理员登录日志
 class AdminLog(db.Model):
     __tablename__ = 'adminlog'
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'))
     ip = db.Column(db.String(100))  # 登录IP
@@ -186,6 +197,7 @@ class AdminLog(db.Model):
 #操作日志
 class OpLog(db.Model):
     __tablename__='oplog'
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'))
     ip = db.Column(db.String(100))  # 登录IP

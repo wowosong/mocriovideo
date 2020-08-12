@@ -73,6 +73,7 @@ def logout():
 @home.route('/register/',methods=['GET','POST'])
 def register():
     form=RegisterForm()
+    print form
     if form.validate_on_submit():
         user=User(name=form.name.data,email=form.email.data,phone=form.phone.data,password_hash=generate_password_hash(form.password.data))
         db.session.add(user)
@@ -91,7 +92,7 @@ def user():
         form.name.data=user.name
         form.phone.data=user.phone
         form.info.data=user.info
-        form.logo.data=user.face
+        form.logo.data=user.face or "1.png"
         form.email.data=user.email
     if form.validate_on_submit():
         file_logo = form.logo.data.filename
