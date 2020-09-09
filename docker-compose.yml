@@ -1,15 +1,13 @@
-version: "3.7"
-
+version: "2.3"
 services:
-
   flask:
     build: ./flask           # 指向相关镜像的Dockerfile所在目录
     container_name: flask
     restart: always
     environment:             # 配置容器的环境变量
-      - APP_NAME=MyFlaskApp
+      - APP_NAME=movie
     expose:                  # 将该容器的8080端口开放给同一网络下的其他容器和服务
-      - 8080
+      - 8085
 
   nginx:
     build: ./nginx

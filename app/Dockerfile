@@ -1,6 +1,6 @@
 # Use the Python3.6 image
 # 使用python 3.6作为基础镜像
-FROM python:3.6
+FROM python:2.7
 
 # Set the working directory to /app
 # 设置工作目录，作用是启动容器后直接进入的目录名称
@@ -14,7 +14,8 @@ ADD . /app
 # Install the dependencies
 # 安装相关依赖
 RUN pip install -r requirements.txt
-
+RUN pip install uwsgi
+COPY uwsgi.ini uwsgi.ini
 # run the command to start uWSGI
 # 容器启动后要执行的命令 -> 启动uWSGI服务器
 CMD ["uwsgi", "uwsgi.ini"]
