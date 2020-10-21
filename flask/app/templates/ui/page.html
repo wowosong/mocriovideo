@@ -1,0 +1,54 @@
+{#{% macro render_page_data(page_data,page_function) %}#}
+{#    {% if page_data %}#}
+{#        <p class="text-center">#}
+{#        <ul class="page_data">#}
+{#            <a href="{{ url_for(page_function,page = 1) }}">首页</a>#}
+{#            {% if page_data.has_prev %}#}
+{#                <a href="{{ url_for(page_function,page = page_data.prev_num) }}">«</a>#}
+{#            {% endif %}#}
+{#            {% for page in page_data.iter_pages() %}#}
+{#                {% if page %}#}
+{#                    {% if page !=page_data.page %}#}
+{#                        <a href="{{ url_for(page_function,page = page) }}">{{ page }}</a>#}
+{#                    {% else %}#}
+{#                        <a href="#">{{ page }}</a>#}
+{#                    {% endif %}#}
+{#                {% endif %}#}
+{#            {% endfor %}#}
+{#            {% if page_data.has_next %}#}
+{#                <a href="{{ url_for(page_function,page = page_data.next_num) }}">»</a>#}
+{#            {% endif %}#}
+{#            <a href="{{ url_for(page_function,page = page_data.pages) }}">末页</a>#}
+{#        </ul>#}
+{#        </p>#}
+{#    {% endif %}#}
+{#{% endmacro %}#}
+{% macro pagination_widget(page_data,page_function,page) %}
+    <ul class="pagination" style="margin-left: 40%;margin-right: 40% ">
+        <li {% if not page_data.has_prev %} class="disabled"{% endif %}>
+            <a href="{% if page_data.has_prev %}{{ url_for(page_function,page=page_data.page - 1,**kwargs) }}{% else %}#{% endif %}">
+            &laquo;
+            </a>
+        </li>
+        {% for p in page_data.iter_pages() %}
+            {% if p %}
+                {% if p==page_data.page %}
+                <li class="active">
+                    <a href="{{ url_for(page_function,page=p,**kwargs) }}">{{ p }}</a>
+                </li>
+                {% else %}
+                <li>
+                <a href="{{ url_for(page_function,page=p,**kwargs) }}">{{ p }}</a>
+                </li>
+                {% endif %}
+            {% else %}
+            <li class="disabled">
+                <a href="#">&hellip;</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        <li {% if not page_data.has_next %}class="disabled"{% endif %}>
+        <a href="{% if page_data.has_next %}{{ url_for(page_function,page=page_data.page + 1,**kwargs) }}{% else %}#{% endif %}">&raquo;</a>
+        </li>
+    </ul>
+{% endmacro %}
