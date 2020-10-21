@@ -21,7 +21,7 @@ Flask-WTF==0.14.2
 ForgeryPy==0.1
 freeze==1.0.10
 html5lib==1.0.1
-httplib2==0.11.3
+httplib2==0.18.0
 idna==2.7
 ipaddress==1.0.22
 itsdangerous==0.24
