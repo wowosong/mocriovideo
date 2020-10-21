@@ -5,7 +5,7 @@ services:
     container_name: flask
     ports:
       - "5000:5000"
-    #  - "8085:8085"
+      - "8085:8085"
     restart: always
     environment:             # 配置容器的环境变量
       - APP_NAME=app
