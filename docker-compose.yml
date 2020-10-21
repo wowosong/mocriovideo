@@ -7,14 +7,15 @@ services:
       - "5000:5000"
     #  - "8085:8085"
     restart: always
-    #environment:             # 配置容器的环境变量
-    #  - APP_NAME=app
+    environment:             # 配置容器的环境变量
+      - APP_NAME=app
     expose:                  # 将该容器的8080端口开放给同一网络下的其他容器和服务
       - 5000
 
   nginx:
-   build: ./nginx
-   container_name: nginx
-   restart: always
-   ports:                   # HOST:CONTAINER 将主机的80端口映射到容器的80端口，相当于将nginx容器的80端口开放给外部网络
-     - "81:81"
+    build: ./nginx
+    container_name: nginx
+    restart: always
+    ports:                   # HOST:CONTAINER 将主机的80端口映射到容器的80端口，相当于将nginx容器的80端口开放给外部网络
+      - "81:81"
+
