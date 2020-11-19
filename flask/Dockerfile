@@ -6,15 +6,12 @@ MAINTAINER 164644354@qq.com
 RUN mkdir /app
 # 设置工作目录，作用是启动容器后直接进入的目录名称
 WORKDIR /app
-# Copy the current directory contents into the container at /app
 # . 表示和Dockerfile同级的目录
 # 该句将当前目录下的文件复制到docker镜像的/app目录中
 ADD . /app
 # Install the dependencies
 # 安装相关依赖
 RUN pip install -r requirements.txt && pip install uwsgi
-
-#ADD . /app
 
 #EXPOSE 5000
 # run the command to start uWSGI
