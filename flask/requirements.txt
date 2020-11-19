@@ -39,7 +39,7 @@ pyparsing==2.4.7
 pytest==6.0.1
 python-dateutil==2.7.3
 pytz==2020.1
-requests==2.18.4
+requests==2.20.0
 robot==20071211
 robotframework==3.0.3
 robotframework-appiumlibrary==1.4.6
